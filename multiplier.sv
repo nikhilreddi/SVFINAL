@@ -7,7 +7,7 @@ typedef enum {overflow,underflow,nan, positive_infinity,negative_infinity, zero 
 
 typedef struct packed{ 
   	logic sign;
-    logic [7:0]exponent;
+    	logic [7:0]exponent;
   	logic [22:0]mantissa;
 	 }fp;
 
@@ -17,8 +17,8 @@ endpackage
  import specialcases::*;
 
 module Multiplication(
-		input wire fp a,
-		input wire fp b,
+		input  fp a,
+		input  fp b,
   		output fp result
         );
  
