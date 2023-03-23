@@ -142,25 +142,6 @@ stimulus s; //creating object handle for class
   end
   
  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-    
  
 
 
