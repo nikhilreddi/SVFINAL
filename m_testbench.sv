@@ -41,7 +41,7 @@ Multiplication DUT( a_operand,b_operand, dut_result);
     
       ///corner test case for underflow ( 2^ -126 x  2^ -1) 
         a_operand=32'b00000000100000000000000000000000;
-		b_operand=32'b00111111000000000000000000000000;
+	b_operand=32'b00111111000000000000000000000000;
     
     
     #1;$display(" %t=time Corner test case for %s , underflow_flag = %b",$time,DUT.Number_form,DUT.underflow_flag);  
@@ -49,35 +49,35 @@ Multiplication DUT( a_operand,b_operand, dut_result);
     				
     
      //corner test case for overflow ( 2^127 x 2^1)
-    				#5;a_operand=32'b01111111000000000000000000000000;
-					b_operand=32'b01000000000000000000000000000000;
+    	#5;a_operand=32'b01111111000000000000000000000000;
+	   b_operand=32'b01000000000000000000000000000000;
     #1 $display("  time=%t ,Corner test case for %s , overflow_flag = %b",$time, DUT.Number_form,DUT.overflow_flag);
     
  
   
-                   //condition to check NAN
-    			  #5 a_operand = 32'b01111111100001110011111000000000;
-    			   b_operand = 32'b01000001100000000000000000000000;
+       //condition to check NAN
+    	#5 a_operand = 32'b01111111100001110011111000000000;
+    	   b_operand = 32'b01000001100000000000000000000000;
     #1$display("  time=%tCorner test case for %s , NAN_flag = %b",$time ,DUT.Number_form,DUT.nan_flag);
   
     
-  				//Test Case to zero flag
-    			  #5 a_operand = 32'b00000000000000000000000000000000;
-    			   b_operand = 32'b01001101100000000000000000000000;
+  	//Test Case to zero flag
+    	#5 a_operand = 32'b00000000000000000000000000000000;
+    	   b_operand = 32'b01001101100000000000000000000000;
     #1
     $display("  time=%tDirect test case for  %s, Zero_flag = %b",$time,DUT.Number_form,DUT.zero_flag);
     
     
-                //Test case for positive infinity
-    			  #5 a_operand = 32'b01111111100000000000000000000000;
-    			   b_operand = 32'b01001101100000000000000000000000;
+          //Test case for positive infinity
+    	#5 a_operand = 32'b01111111100000000000000000000000;
+    	   b_operand = 32'b01001101100000000000000000000000;
     #1
     $display("  time=%t Direct test case for  %s, positive _infinity _ flag =",$time,DUT.Number_form, DUT.positive_infinity_flag);
      
     
-    			//	Test case for negative infinity
-    			 #5  a_operand = 32'b11111111100000000000000000000000;
-    			   b_operand = 32'b01001101100000000000000000000000;
+    	//Test case for negative infinity
+    	#5  a_operand = 32'b11111111100000000000000000000000;
+    	    b_operand = 32'b01001101100000000000000000000000;
     #1
     $display("  time=%tDirect test case for  %s, negative _infinity _ flag =",$time,DUT.Number_form, DUT.negative_infinity_flag);
     
@@ -120,13 +120,13 @@ stimulus s; //creating object handle for class
         $display(" time=%t overflow_flag = %b,underflow_flag = %b,nan_flag = %b, positive_infinity_flag = %b,negative_infinity_flag = %b, zero_flag =%b ",$time ,DUT.overflow_flag,DUT.underflow_flag,DUT.nan_flag, DUT.positive_infinity_flag,DUT.negative_infinity_flag, DUT.zero_flag);
        
         if(( DUT.overflow_flag == 1'b1) || (DUT.underflow_flag == 1'b1)  ||( DUT.nan_flag == 1'b1 ) || (DUT.positive_infinity_flag == 1'b1) || (DUT.negative_infinity_flag == 1'b1) || (DUT.zero_flag) == 1'b1)
-        		flag_count = flag_count+1;
+        		flag_count = flag_count+1; //If any flags are activated we are not self  checking
         
         else if( Expected_output === dut_result) begin
           		pass_count = pass_count+1;
-           end
-       			 else  begin
-          		fail_count = fail_count+1;
+           	end
+       	else  begin
+          	   fail_count = fail_count+1;
                    $display(" time=%t failed at a_sign = %b , a_exponent = %b, a_mantissa= %b , b_sign = %b , b_exponent = %b, b_mantissa= %b ",$time,s.a_sign,s.a_exponent,s.a_mantissa,s.b_sign,s.b_exponent,s.b_mantissa);
                    
                    $display("***********************************************************************");
@@ -161,24 +161,7 @@ stimulus s; //creating object handle for class
   
   
     
- /* 
-//Assertions for fp multiplication 
-
-
-assert property (@(posedge clk) (a_operand * b_operand == result) |-> ((result >= 0.0) && (result <= 100.0))) else $error("Multiplication result is outside valid range");
-    $display("Multiplication within range test passed");
-
-    // Test multiplication following IEEE 754 standard,as it ensures that the result of the multiplication does not underflow.
-    a_operand = 1.0e+308;
-    b_operand = 1.0e+308;
-  assert property (@(posedge clk) (a_operand * b_operand == result) |-> $isinf(a_operand) || $isinf(b_operand) || ($abs(result) >= $abs(a_operand) * $abs(b_operand))) else $error("Multiplication result does not follow IEEE 754 standard");
-    $display("Multiplication following IEEE 754 test passed");
-
-    // Test multiplication does not result in NaN
-    a_operand = 1.0;
-    b_operand = 0.0;
-    assert property (@(posedge clk) (a_operand * b_operand == result) |-> !$isnan(result)) else $error("Multiplication result is NaN");
-    $display("Multiplication does not result in NaN test passed"); */
+ 
 
 
 endmodule
