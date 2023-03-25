@@ -1,5 +1,3 @@
-
-// Code your design here
 package specialcases;
 
 //All SpecialCases are considered here
@@ -14,11 +12,11 @@ typedef struct packed{
 endpackage
 
   
- import specialcases::*;
+import specialcases::*;
 
 module Multiplication(
-		input  fp a,
-		input  fp b,
+		input  wire fp a,
+		input  wire fp b,
   		output fp result
         );
  
@@ -26,10 +24,10 @@ module Multiplication(
   	SpecialCases Number_form; // specialcases datatype declaration
   
   	logic [8:0]exponent_sum;
-    logic [47:0]product,product_normalised;
+    	logic [47:0]product,product_normalised;
 	logic normalised;
   	logic [22:0]product_mantissa;
-    logic overflow_flag,underflow_flag,nan_flag, positive_infinity_flag,negative_infinity_flag, zero_flag;
+        logic overflow_flag,underflow_flag,nan_flag, positive_infinity_flag,negative_infinity_flag, zero_flag;
 	
   	
     
@@ -42,7 +40,7 @@ always_comb
     begin
       
       //assertion to check the inputs are known
-       a1: assert ((!$isunknown(a)) ||(!$isunknown(b)))
+      a1: assert ((!$isunknown(a)) && (!$isunknown(b)))
        else $error("one of the input is unknown a=%b, b=%b",a,b); 
       
       //assertion to check exponent is in  range of 1-254
@@ -92,8 +90,7 @@ always_comb
 		
 	 //underflow condition	
       else if(exponent_sum[8] == 1'b1 && (exponent_sum[7])  || exponent_sum[7:0] == '0 )
-	  begin
-        
+	  begin       
          Number_form = underflow;
 		 {nan_flag, positive_infinity_flag,negative_infinity_flag, zero_flag ,overflow_flag,underflow_flag}= 6'b000001;
       end
@@ -112,12 +109,12 @@ always_comb
   
 //normalisation
 
-  assign normalised = product[47] ? 1'b1 : 1'b0;	             //check if MSB bit of 48 bit product is 1
+assign normalised = product[47] ? 1'b1 : 1'b0;	             //check if MSB bit of 48 bit product is 1
 assign product_normalised = normalised ? product : product << 1; //If msb is zero ,left shift the 48 bit product
   
 //rounding
-  assign product_round = |product_normalised[22:0];                                              //or of sticky bits 
-  assign product_mantissa = product_normalised[46:24] + (product_normalised[23] & product_round); //check if guard bit is one then round even
+assign product_round = |product_normalised[22:0];                                              //or of sticky bits 
+assign product_mantissa = product_normalised[46:24] + (product_normalised[23] & product_round); //check if guard bit is one then round even
 
 
   
@@ -133,7 +130,7 @@ assign product_normalised = normalised ? product : product << 1; //If msb is zer
           
           //assertion to check the dut result is inifity 
           a3:assert(((a.exponent != '1  && a.mantissa != '0) || (b.sign != 1'b1 && b.exponent != '1 && b.mantissa != '0)) && (!positive_infinity_flag || !negative_infinity_flag))
-        else $error("dut_result is infinity, positive_infinity_flag = %b,negative_infinity_flag = %d",positive_infinity_flag,negative_infinity_flag);
+            else $error("dut_result is infinity");
          
         end
           
@@ -143,4 +140,3 @@ assign product_normalised = normalised ? product : product << 1; //If msb is zer
  
   
 endmodule
-  
