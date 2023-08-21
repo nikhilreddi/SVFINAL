@@ -57,27 +57,27 @@ always_comb
       if((a.exponent == '1  && a.mantissa != '0) || (b.exponent == '1 && b.mantissa != '0))
         begin
         	Number_form = nan;
-          {nan_flag, positive_infinity_flag,negative_infinity_flag, zero_flag ,overflow_flag,underflow_flag} = 6'b100000;
+          	{nan_flag, positive_infinity_flag,negative_infinity_flag, zero_flag ,overflow_flag,underflow_flag} = 6'b100000;
 		end
 		
       // Positive Infinity Condition
       else if(( a.sign == 1'b0  && a.exponent == '1  && a.mantissa == '0) || ( b.sign == 1'b0  &&  b.exponent == '1 && b.mantissa == '0) ) 
         begin
-      		Number_form = positive_infinity;
+      			Number_form = positive_infinity;
 			{nan_flag, positive_infinity_flag,negative_infinity_flag, zero_flag ,overflow_flag,underflow_flag} = 6'b010000;
 		end
 			
        //Negative_infinity condition     
       else if((a.sign == 1'b1 && a.exponent == '1  && a.mantissa == '0) || (b.sign == 1'b1 && b.exponent == '1 && b.mantissa == '0) ) 
         begin
-           Number_form = negative_infinity;
+           	   Number_form = negative_infinity;
 		   {nan_flag, positive_infinity_flag,negative_infinity_flag, zero_flag ,overflow_flag,underflow_flag} = 6'b001000;
 		end
           
 	  //ZeroFlag condition
       else if ((a.exponent == '0 && a.mantissa == '0) || (b.exponent == '0 &&  b.mantissa == '0))
         begin
-          Number_form = zero;
+         	   Number_form = zero;
 		  {nan_flag, positive_infinity_flag,negative_infinity_flag, zero_flag ,overflow_flag,underflow_flag} = 6'b000100;
         end
 		
@@ -85,19 +85,19 @@ always_comb
       else if(exponent_sum[8] == 1'b1 && !(exponent_sum[7])   || exponent_sum[7:0] == '1 )
         begin
 			Number_form = overflow;
-            {nan_flag, positive_infinity_flag,negative_infinity_flag, zero_flag ,overflow_flag,underflow_flag} = 6'b000010;
+            		{nan_flag, positive_infinity_flag,negative_infinity_flag, zero_flag ,overflow_flag,underflow_flag} = 6'b000010;
 		end
 		
 	 //underflow condition	
       else if(exponent_sum[8] == 1'b1 && (exponent_sum[7])  || exponent_sum[7:0] == '0 )
 	  begin       
-         Number_form = underflow;
+         	  Number_form = underflow;
 		 {nan_flag, positive_infinity_flag,negative_infinity_flag, zero_flag ,overflow_flag,underflow_flag}= 6'b000001;
       end
       
        else 
          begin
-          Number_form = normalizedNumber;
+          	  Number_form = normalizedNumber;
 		  {nan_flag, positive_infinity_flag,negative_infinity_flag, zero_flag ,overflow_flag,underflow_flag} = 6'b000000;
 		end
       
@@ -109,8 +109,8 @@ always_comb
   
 //normalisation
 
-assign normalised = product[47] ? 1'b1 : 1'b0;	             //check if MSB bit of 48 bit product is 1
-assign product_normalised = normalised ? product : product << 1; //If msb is zero ,left shift the 48 bit product
+assign normalised = product[47] ? 1'b1 : 1'b0;	               //check if MSB bit of 48 bit product is 1
+assign product_normalised = normalised ? product : product << 1;       //If msb is zero ,left shift the 48 bit product
   
 //rounding
 assign product_round = |product_normalised[22:0];                                              //or of sticky bits 
@@ -129,7 +129,7 @@ assign product_mantissa = product_normalised[46:24] + (product_normalised[23] & 
         result = {sign,exponent_sum[7:0], product_mantissa};
           
           //assertion to check the dut result is inifity 
-          a3:assert(((a.exponent != '1  && a.mantissa != '0) || (b.sign != 1'b1 && b.exponent != '1 && b.mantissa != '0)) && (!positive_infinity_flag || !negative_infinity_flag))
+            a3:assert(((a.exponent != '1  && a.mantissa != '0) || (b.sign != 1'b1 && b.exponent != '1 && b.mantissa != '0)) && (!positive_infinity_flag || !negative_infinity_flag))
             else $error("dut_result is infinity");
          
         end
